@@ -1,0 +1,54 @@
+#####
+package com.mini.project;
+
+import java.util.*;
+
+//import com.tech.exception.InvalidStatusException;
+
+public class patient {
+
+	private int patientId;
+	private String patientName;
+	private Vector<Incident> vector = new Vector<Incident>(); 
+
+	public patient(int patientId, String patientName) {
+		this.patientId = patientId;
+		this.patientName = patientName;
+	}
+
+	public void addNewIncident(Incident incident) {
+		vector.add(incident);
+	}
+
+	public Vector<Incident> getIncidentList() {
+
+		return vector;
+	}
+
+	public void changeIncidentStatus(int incidentId, String status)
+			throws InvalidStatusException {
+		Iterator<Incident> itr = vector.iterator();
+		boolean check = true;
+		while (itr.hasNext()) {
+			Incident incident = itr.next();
+			if (incident.getIncidentId() == incidentId) {
+				incident.setIncidentStatus(status);
+				check = false;
+			}
+		}
+		if (check == false) {
+			System.out.println("Incident not found");
+		}
+	}
+
+	public void displayIncidents() {
+		Vector<Incident> incidentList = getIncidentList();
+		Iterator<Incident> itr = incidentList.iterator();
+		while (itr.hasNext()) {
+			Incident incident = itr.next();
+			System.out.println(incident);
+		}
+	}
+
+}
+
