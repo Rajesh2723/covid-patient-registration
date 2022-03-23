@@ -1,0 +1,38 @@
+#########invalid status exception
+package com.mini.project;
+
+public class InvalidStatusException extends Exception {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	public InvalidStatusException() {
+		// TODO Auto-generated constructor stub
+	}
+	
+	public InvalidStatusException(String msg) {
+		// TODO Auto-generated constructor stub
+		super(msg);
+	}
+	@Override
+	public String getMessage() {
+		// TODO Auto-generated method stub
+		return super.getMessage();
+	}
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
