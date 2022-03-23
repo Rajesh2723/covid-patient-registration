@@ -1,0 +1,51 @@
+#########incident class 
+package com.mini.project;
+
+//import com.tech.exception.InvalidStatusException;
+
+public class Incident {
+
+	private int incidentId;
+	private String incidentType;
+	private String incidentDescription;
+	private String incidentStatus = "getting soon fine ";
+
+	public Incident(int incidentId, String incidentType,
+			String incidentDescription)  {
+			this.incidentId = incidentId;
+			this.incidentType = incidentType;
+			this.incidentDescription = incidentDescription;
+		}
+	
+	public int getIncidentId() {
+		return incidentId;
+	}
+
+	public String getIncidentType() {
+		return incidentType;
+	}
+
+	public String getIncidentDescription() {
+		return incidentDescription;
+	}
+
+	public String getIncidentStatus() {
+		return incidentStatus;
+	}
+
+	public void setIncidentStatus(String incidentStatus) throws InvalidStatusException {
+		
+		if(incidentStatus.equals("InProgress")||incidentStatus.equals("Closed"))
+		this.incidentStatus = incidentStatus;
+		else
+		{
+				throw new InvalidStatusException("Invalid status Exception. Should be either Inprogress or Closed ");
+		}
+	}
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return "incident id:"+incidentId+"\nincident type:"+incidentType+"\nIncidentDescription:"+incidentDescription+"\nIncident Status:"+incidentStatus+"\n";
+	}
+}
+
