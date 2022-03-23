@@ -1,0 +1,241 @@
+CUSTOMER CLASS:
+package com.mini.project;
+
+import java.util.*;
+
+//import com.tech.exception.InvalidStatusException;
+
+public class Customer {
+
+private int customerId;
+private String customerName;
+private Vector<Incident> vector = new Vector<Incident>();
+
+public Customer(int customerId, String customerName) {
+this.customerId = customerId;
+this.customerName = customerName;
+}
+
+public void addNewIncident(Incident incident) {
+vector.add(incident);
+}
+
+public Vector<Incident> getIncidentList() {
+
+return vector;
+}
+
+public void changeIncidentStatus(int incidentId, String status)
+throws InvalidStatusException {
+Iterator<Incident> itr = vector.iterator();
+boolean check = false;
+while (itr.hasNext()) {
+Incident incident = itr.next();
+if (incident.getIncidentId() == incidentId) {
+incident.setIncidentStatus(status);
+check = true;
+}
+}
+if (check == false) {
+System.out.println("Incident not found");
+}
+}
+
+public void displayIncidents() {
+Vector<Incident> incidentList = getIncidentList();
+Iterator<Incident> itr = incidentList.iterator();
+while (itr.hasNext()) {
+Incident incident = itr.next();
+System.out.println(incident);
+}
+}
+
+}
+CLASS INCIDENT :
+package com.mini.project;
+
+
+//import com.tech.exception.InvalidStatusException;
+
+public class Incident {
+
+private int incidentId;
+private String incidentType;
+private String incidentDescription;
+private String incidentStatus = "New";
+
+public Incident(int incidentId, String incidentType,
+String incidentDescription)  {
+this.incidentId = incidentId;
+this.incidentType = incidentType;
+this.incidentDescription = incidentDescription;
+}
+
+
+public int getIncidentId() {
+return incidentId;
+}
+
+public String getIncidentType() {
+return incidentType;
+}
+
+public String getIncidentDescription() {
+return incidentDescription;
+}
+
+public String getIncidentStatus() {
+return incidentStatus;
+}
+
+public void setIncidentStatus(String incidentStatus) throws InvalidStatusException {
+
+if(incidentStatus.equals("InProgress")||incidentStatus.equals("Closed"))
+this.incidentStatus = incidentStatus;
+else
+{
+throw new InvalidStatusException("Invalid status Exception. Should be either Inprogress or Closed ");
+}
+}
+@Override
+public String toString() {
+// TODO Auto-generated method stub
+return "incident id:"+incidentId+"\nincident type:"+incidentType+"\nIncidentDescription:"+incidentDescription+"\nIncident Status:"+incidentStatus+"\n";
+}
+}
+
+INVALID ID EXCEPTION STATUS EXTENDS:
+package com.mini.project;
+
+public class InvalidIncidentIdException extends Exception {
+
+/**
+*
+*/
+private static final long serialVersionUID = 1L;
+public InvalidIncidentIdException() {
+// TODO Auto-generated constructor stub
+}
+public InvalidIncidentIdException(String msg) {
+// TODO Auto-generated constructor stub
+super(msg);
+}
+@Override
+public String getMessage() {
+// TODO Auto-generated method stub
+return super.getMessage();
+}
+}
+
+InvalidStatusException extends Exception:
+
+package com.mini.project;
+
+public class InvalidStatusException extends Exception {
+
+/**
+*
+*/
+private static final long serialVersionUID = 1L;
+public InvalidStatusException() {
+// TODO Auto-generated constructor stub
+}
+
+public InvalidStatusException(String msg) {
+// TODO Auto-generated constructor stub
+super(msg);
+}
+@Override
+public String getMessage() {
+// TODO Auto-generated method stub
+return super.getMessage();
+}
+
+}
+SEVICE DESK:  CLASS:
+
+package com.mini.project;
+
+import java.io.*;
+
+//import com.tech.exception.InvalidIncidentIdException;
+//import com.tech.exception.InvalidStatusException;
+
+public class ServiceDesk {
+
+/**
+* @param args
+* @throws IOException
+* @throws InvalidIncidentIdException
+* @throws InvalidStatusException
+* @throws NumberFormatException
+*/
+public static void main(String[] args) throws IOException{
+// TODO Auto-generated method stub
+boolean check = false;
+int incidentId = 0;
+BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+System.out.println("Enter customer id:");
+int customerId = Integer.parseInt(br.readLine());
+System.out.println("Enter customer name:");
+String customerName = br.readLine();
+Customer customer = new Customer(customerId, customerName);
+System.out.println("Enter number of incidents to be raised:");
+int n = Integer.parseInt(br.readLine());
+for (int i = 1; i <= n; i++) {
+System.out.println("Enter incident " + i + " details");
+System.out.println("incident id:");
+String sincidentId = br.readLine();
+System.out.println("incident type:");
+String incidentType = br.readLine();
+System.out.println("incident description:");
+String incidentDescription = br.readLine();
+if (sincidentId.length() != 4 || Integer.parseInt(sincidentId) <= 0) {
+try {
+System.out.println(sincidentId.length() + " "
++ Integer.parseInt(sincidentId));
+throw new InvalidIncidentIdException(
+"Invalid incident Id. Id must be equal to 4 digits and greater than zero");
+} catch (InvalidIncidentIdException e) {
+// TODO Auto-generated catch block
+System.err.println(e.getMessage());
+i = i - 1;
+System.out.println("Enter details again");
+continue;
+}
+
+} else {
+incidentId = Integer.parseInt(sincidentId);
+}
+Incident incident = new Incident(incidentId, incidentType,
+incidentDescription);
+customer.addNewIncident(incident);
+
+}
+
+customer.displayIncidents();
+while (check) {
+System.out.println("1.Change incident status\n2.Not necessary\nEnter choice:");
+int ch = Integer.parseInt(br.readLine());
+switch (ch) {
+case 1:
+System.out.println("Enter incident id and status:");
+incidentId = Integer.parseInt(br.readLine());
+String status = br.readLine();
+try {
+customer.changeIncidentStatus(incidentId, status);
+} catch (InvalidStatusException e) {
+// TODO Auto-generated catch block
+System.err.println(e.getMessage());
+}
+customer.displayIncidents();
+break;
+case 2:
+check = false;
+break;
+}
+}
+}
+
+}
+
